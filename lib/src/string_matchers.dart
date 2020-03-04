@@ -141,7 +141,7 @@ class _StringContainsInOrder extends FeatureMatcher<String> {
 Matcher matches(re) => _MatchesRegExp(re);
 
 class _MatchesRegExp extends FeatureMatcher<String> {
-  RegExp _regexp;
+  late final RegExp _regexp;
 
   _MatchesRegExp(re) {
     if (re is String) {

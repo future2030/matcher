@@ -14,8 +14,8 @@ class HavingMatcher<T> implements TypeMatcher<T> {
   final List<_FunctionMatcher<T>> _functionMatchers;
 
   HavingMatcher(TypeMatcher<T> parent, String description,
-      Object Function(T) feature, Object matcher,
-      [Iterable<_FunctionMatcher<T>> existing])
+      dynamic Function(T) feature, Object matcher,
+      [Iterable<_FunctionMatcher<T>>? existing])
       : _parent = parent,
         _functionMatchers = [
           ...?existing,
@@ -24,7 +24,7 @@ class HavingMatcher<T> implements TypeMatcher<T> {
 
   @override
   TypeMatcher<T> having(
-          Object Function(T) feature, String description, Object matcher) =>
+          dynamic Function(T) feature, String description, Object matcher) =>
       HavingMatcher(_parent, description, feature, matcher, _functionMatchers);
 
   @override

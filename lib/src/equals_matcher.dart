@@ -20,7 +20,7 @@ Matcher equals(expected, [int limit = 100]) => expected is String
     ? _StringEqualsMatcher(expected)
     : _DeepMatcher(expected, limit);
 
-typedef _RecursiveMatcher = List<String> Function(
+typedef _RecursiveMatcher = List<String>? Function(
     dynamic, dynamic, String, int);
 
 /// A special equality matcher for strings.
@@ -105,7 +105,7 @@ class _DeepMatcher extends Matcher {
   _DeepMatcher(this._expected, [int limit = 1000]) : _limit = limit;
 
   // Returns a pair (reason, location)
-  List<String> _compareIterables(Iterable expected, Object actual,
+  List<String>? _compareIterables(Iterable expected, Object actual,
       _RecursiveMatcher matcher, int depth, String location) {
     if (actual is Iterable) {
       var expectedIterator = expected.iterator;
@@ -133,7 +133,7 @@ class _DeepMatcher extends Matcher {
     }
   }
 
-  List<String> _compareSets(Set expected, Object actual,
+  List<String>? _compareSets(Set expected, Object actual,
       _RecursiveMatcher matcher, int depth, String location) {
     if (actual is Iterable) {
       var other = actual.toSet();
@@ -157,8 +157,8 @@ class _DeepMatcher extends Matcher {
     }
   }
 
-  List<String> _recursiveMatch(
-      Object expected, Object actual, String location, int depth) {
+  List<String>? _recursiveMatch(
+      dynamic expected, dynamic actual, String location, int depth) {
     // If the expected value is a matcher, try to match it.
     if (expected is Matcher) {
       var matchState = {};
@@ -189,16 +189,15 @@ class _DeepMatcher extends Matcher {
             expected, actual, _recursiveMatch, depth + 1, location);
       } else if (expected is Map) {
         if (actual is! Map) return ['expected a map', location];
-        var map = actual as Map;
         var err =
-            (expected.length == map.length) ? '' : 'has different length and ';
+            (expected.length == actual.length) ? '' : 'has different length and ';
         for (var key in expected.keys) {
-          if (!map.containsKey(key)) {
+          if (!actual.containsKey(key)) {
             return ["${err}is missing map key '$key'", location];
           }
         }
 
-        for (var key in map.keys) {
+        for (var key in actual.keys) {
           if (!expected.containsKey(key)) {
             return ["${err}has extra map key '$key'", location];
           }
@@ -206,7 +205,7 @@ class _DeepMatcher extends Matcher {
 
         for (var key in expected.keys) {
           var rp = _recursiveMatch(
-              expected[key], map[key], "$location['$key']", depth + 1);
+              expected[key], actual[key], "$location['$key']", depth + 1);
           if (rp != null) return rp;
         }
 
@@ -231,7 +230,7 @@ class _DeepMatcher extends Matcher {
     return ['', location];
   }
 
-  String _match(expected, actual, Map matchState) {
+  String? _match(expected, actual, Map matchState) {
     var rp = _recursiveMatch(expected, actual, '', 0);
     if (rp == null) return null;
     String reason;
@@ -260,7 +259,7 @@ class _DeepMatcher extends Matcher {
   @override
   Description describeMismatch(
       item, Description mismatchDescription, Map matchState, bool verbose) {
-    var reason = matchState['reason'] as String ?? '';
+    var reason = matchState['reason'] as String? ?? '';
     // If we didn't get a good reason, that would normally be a
     // simple 'is <value>' message. We only add that if the mismatch
     // description is non empty (so we are supplementing the mismatch

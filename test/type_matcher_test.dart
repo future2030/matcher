@@ -32,7 +32,7 @@ void main() {
   });
 }
 
-void _test<T>(Matcher typeMatcher, T matchingInstance, {String name}) {
+void _test<T>(Matcher typeMatcher, T? matchingInstance, {String? name}) {
   name ??= T.toString();
   group('for `$name`', () {
     if (matchingInstance != null) {
