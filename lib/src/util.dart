@@ -46,7 +46,7 @@ Matcher wrapMatcher(x) {
     // x is a unary predicate, but expects a specific type
     // so wrap it.
     // ignore: unnecessary_lambdas
-    return predicate((a) => (x as dynamic)(a));
+    return predicate((dynamic a) => (x as dynamic)(a));
   } else {
     return equals(x);
   }
@@ -61,7 +61,7 @@ String escape(String str) {
   return str.replaceAllMapped(_escapeRegExp, (match) {
     var mapped = _escapeMap[match[0]];
     if (mapped != null) return mapped;
-    return _getHexLiteral(match[0]);
+    return _getHexLiteral(match[0]!);
   });
 }
 

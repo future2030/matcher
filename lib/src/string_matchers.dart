@@ -62,7 +62,7 @@ class _IsEqualIgnoringWhitespace extends FeatureMatcher<String> {
 
   @override
   Description describeTypedMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
+      item, Description mismatchDescription, Map? matchState, bool verbose) {
     return mismatchDescription
         .add('is ')
         .addDescriptionOf(collapseWhitespace(item))
@@ -141,7 +141,7 @@ class _StringContainsInOrder extends FeatureMatcher<String> {
 Matcher matches(re) => _MatchesRegExp(re);
 
 class _MatchesRegExp extends FeatureMatcher<String> {
-  RegExp _regexp;
+  RegExp? _regexp;
 
   _MatchesRegExp(re) {
     if (re is String) {
@@ -154,11 +154,11 @@ class _MatchesRegExp extends FeatureMatcher<String> {
   }
 
   @override
-  bool typedMatches(item, Map matchState) => _regexp.hasMatch(item);
+  bool typedMatches(item, Map matchState) => _regexp!.hasMatch(item);
 
   @override
   Description describe(Description description) =>
-      description.add("match '${_regexp.pattern}'");
+      description.add("match '${_regexp!.pattern}'");
 }
 
 /// Utility function to collapse whitespace runs to single spaces

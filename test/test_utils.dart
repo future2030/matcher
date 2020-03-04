@@ -38,21 +38,21 @@ void doesThrow() {
 }
 
 class Widget {
-  int price;
+  int? price;
 }
 
-class SimpleIterable extends Iterable<int> {
+class SimpleIterable extends Iterable<int?> {
   final int count;
 
   SimpleIterable(this.count);
 
   @override
-  Iterator<int> get iterator => _SimpleIterator(count);
+  Iterator<int?> get iterator => _SimpleIterator(count);
 }
 
-class _SimpleIterator implements Iterator<int> {
+class _SimpleIterator implements Iterator<int?> {
   int _count;
-  int _current;
+  int? _current;
 
   _SimpleIterator(this._count);
 
@@ -68,5 +68,5 @@ class _SimpleIterator implements Iterator<int> {
   }
 
   @override
-  int get current => _current;
+  int? get current => _current;
 }

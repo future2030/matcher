@@ -36,8 +36,8 @@ class _EveryElement extends _IterableMatcher {
 
   @override
   Description describeTypedMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
-    if (matchState['index'] != null) {
+      item, Description mismatchDescription, Map? matchState, bool verbose) {
+    if (matchState!['index'] != null) {
       var index = matchState['index'];
       var element = matchState['element'];
       mismatchDescription
@@ -46,7 +46,7 @@ class _EveryElement extends _IterableMatcher {
           .add(' which ');
       var subDescription = StringDescription();
       _matcher.describeMismatch(
-          element, subDescription, matchState['state'] as Map, verbose);
+          element, subDescription, matchState['state'] as Map?, verbose);
       if (subDescription.length > 0) {
         mismatchDescription.add(subDescription.toString());
       } else {
@@ -101,7 +101,7 @@ class _OrderedEquals extends _IterableMatcher {
 
   @override
   Description describeTypedMismatch(Iterable item,
-      Description mismatchDescription, Map matchState, bool verbose) {
+      Description mismatchDescription, Map? matchState, bool verbose) {
     return _matcher.describeMismatch(
         item, mismatchDescription, matchState, verbose);
   }
@@ -145,11 +145,11 @@ class _UnorderedMatches extends _IterableMatcher {
   final List<Matcher> _expected;
   final bool _allowUnmatchedValues;
 
-  _UnorderedMatches(Iterable expected, {bool allowUnmatchedValues})
+  _UnorderedMatches(Iterable expected, {bool? allowUnmatchedValues})
       : _expected = expected.map(wrapMatcher).toList(),
         _allowUnmatchedValues = allowUnmatchedValues ?? false;
 
-  String _test(List values) {
+  String? _test(List values) {
     // Check the lengths are the same.
     if (_expected.length > values.length) {
       return 'has too few elements (${values.length} < ${_expected.length})';
@@ -167,7 +167,7 @@ class _UnorderedMatches extends _IterableMatcher {
     }
     // The index into `values` matched with each matcher or `null` if no value
     // has been matched yet.
-    var matched = List<int>(_expected.length);
+    var matched = List<int?>(_expected.length);
     for (var valueIndex = 0; valueIndex < values.length; valueIndex++) {
       _findPairing(edges, valueIndex, matched);
     }
@@ -203,8 +203,8 @@ class _UnorderedMatches extends _IterableMatcher {
 
   @override
   Description describeTypedMismatch(item, Description mismatchDescription,
-          Map matchState, bool verbose) =>
-      mismatchDescription.add(_test(item.toList()));
+          Map? matchState, bool verbose) =>
+      mismatchDescription.add(_test(item.toList())!);
 
   /// Returns `true` if the value at [valueIndex] can be paired with some
   /// unmatched matcher and updates the state of [matched].
@@ -212,18 +212,18 @@ class _UnorderedMatches extends _IterableMatcher {
   /// If there is a conflict where multiple values may match the same matcher
   /// recursively looks for a new place to match the old value. [reserved]
   /// tracks the matchers that have been used _during_ this search.
-  bool _findPairing(List<List<int>> edges, int valueIndex, List<int> matched,
-      [Set<int> reserved]) {
+  bool _findPairing(List<List<int>> edges, int valueIndex, List<int?> matched,
+      [Set<int>? reserved]) {
     reserved ??= <int>{};
     final possiblePairings =
-        edges[valueIndex].where((m) => !reserved.contains(m));
+        edges[valueIndex].where((m) => !reserved!.contains(m));
     for (final matcherIndex in possiblePairings) {
       reserved.add(matcherIndex);
       final previouslyMatched = matched[matcherIndex];
       if (previouslyMatched == null ||
           // If the matcher isn't already free, check whether the existing value
           // occupying the matcher can be bumped to another one.
-          _findPairing(edges, matched[matcherIndex], matched, reserved)) {
+          _findPairing(edges, matched[matcherIndex]!, matched, reserved)) {
         matched[matcherIndex] = valueIndex;
         return true;
       }
@@ -273,14 +273,14 @@ class _PairwiseCompare<S, T> extends _IterableMatcher {
 
   @override
   Description describeTypedMismatch(Iterable item,
-      Description mismatchDescription, Map matchState, bool verbose) {
+      Description mismatchDescription, Map? matchState, bool verbose) {
     if (item.length != _expected.length) {
       return mismatchDescription
           .add('has length ${item.length} instead of ${_expected.length}');
     } else {
       return mismatchDescription
           .add('has ')
-          .addDescriptionOf(matchState['actual'])
+          .addDescriptionOf(matchState!['actual'])
           .add(' which is not $_description ')
           .addDescriptionOf(matchState['expected'])
           .add(' at index ${matchState["index"]}');
@@ -333,11 +333,11 @@ class _ContainsAllInOrder extends _IterableMatcher {
 
   _ContainsAllInOrder(this._expected);
 
-  String _test(Iterable item, Map matchState) {
+  String? _test(Iterable item, Map? matchState) {
     var matchers = _expected.map(wrapMatcher).toList();
     var matcherIndex = 0;
     for (var value in item) {
-      if (matchers[matcherIndex].matches(value, matchState)) matcherIndex++;
+      if (matchers[matcherIndex].matches(value, matchState!)) matcherIndex++;
       if (matcherIndex == matchers.length) return null;
     }
     return StringDescription()
@@ -359,6 +359,6 @@ class _ContainsAllInOrder extends _IterableMatcher {
 
   @override
   Description describeTypedMismatch(Iterable item,
-          Description mismatchDescription, Map matchState, bool verbose) =>
-      mismatchDescription.add(_test(item, matchState));
+          Description mismatchDescription, Map? matchState, bool verbose) =>
+      mismatchDescription.add(_test(item, matchState)!);
 }

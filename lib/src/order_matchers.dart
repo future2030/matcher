@@ -101,7 +101,7 @@ class _OrderingMatcher extends Matcher {
 
   @override
   Description describeMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
+      item, Description mismatchDescription, Map? matchState, bool verbose) {
     mismatchDescription.add('is not ');
     return describe(mismatchDescription);
   }

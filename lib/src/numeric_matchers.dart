@@ -33,7 +33,7 @@ class _IsCloseTo extends FeatureMatcher<num> {
 
   @override
   Description describeTypedMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
+      item, Description mismatchDescription, Map? matchState, bool verbose) {
     var diff = item - _value;
     if (diff < 0) diff = -diff;
     return mismatchDescription.add(' differs by ').addDescriptionOf(diff);

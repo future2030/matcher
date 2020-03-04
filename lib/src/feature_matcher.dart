@@ -13,13 +13,13 @@ abstract class FeatureMatcher<T> extends TypeMatcher<T> {
 
   @override
   bool matches(item, Map matchState) =>
-      super.matches(item, matchState) && typedMatches(item, matchState);
+      super.matches(item, matchState) && typedMatches(item as T, matchState);
 
   bool typedMatches(T item, Map matchState);
 
   @override
   Description describeMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
+      item, Description mismatchDescription, Map? matchState, bool verbose) {
     if (item is T) {
       return describeTypedMismatch(
           item, mismatchDescription, matchState, verbose);
@@ -29,6 +29,6 @@ abstract class FeatureMatcher<T> extends TypeMatcher<T> {
   }
 
   Description describeTypedMismatch(T item, Description mismatchDescription,
-          Map matchState, bool verbose) =>
+          Map? matchState, bool verbose) =>
       mismatchDescription;
 }

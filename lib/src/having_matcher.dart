@@ -14,8 +14,8 @@ class HavingMatcher<T> implements TypeMatcher<T> {
   final List<_FunctionMatcher<T>> _functionMatchers;
 
   HavingMatcher(TypeMatcher<T> parent, String description,
-      Object Function(T) feature, Object matcher,
-      [Iterable<_FunctionMatcher<T>> existing])
+      Object? Function(T) feature, Object matcher,
+      [Iterable<_FunctionMatcher<T>>? existing])
       : _parent = parent,
         _functionMatchers = [
           ...?existing,
@@ -24,7 +24,7 @@ class HavingMatcher<T> implements TypeMatcher<T> {
 
   @override
   TypeMatcher<T> having(
-          Object Function(T) feature, String description, Object matcher) =>
+          Object? Function(T) feature, String description, Object matcher) =>
       HavingMatcher(_parent, description, feature, matcher, _functionMatchers);
 
   @override
@@ -40,10 +40,10 @@ class HavingMatcher<T> implements TypeMatcher<T> {
 
   @override
   Description describeMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
-    var matcher = matchState['matcher'] as Matcher;
+      item, Description mismatchDescription, Map? matchState, bool verbose) {
+    var matcher = (matchState!['matcher'] as Matcher?)!;
     matcher.describeMismatch(
-        item, mismatchDescription, matchState['state'] as Map, verbose);
+        item, mismatchDescription, matchState['state'] as Map?, verbose);
     return mismatchDescription;
   }
 
@@ -62,5 +62,5 @@ class _FunctionMatcher<T> extends CustomMatcher {
       : super('`$name`:', '`$name`', matcher);
 
   @override
-  Object featureValueOf(covariant T actual) => _feature(actual);
+  Object? featureValueOf(covariant T actual) => _feature(actual);
 }

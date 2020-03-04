@@ -39,12 +39,12 @@ class CustomMatcher extends Matcher {
       : _matcher = wrapMatcher(matcher);
 
   /// Override this to extract the interesting feature.
-  Object featureValueOf(actual) => actual;
+  Object? featureValueOf(actual) => actual;
 
   @override
   bool matches(item, Map matchState) {
     try {
-      var f = featureValueOf(item);
+      var f = featureValueOf(item)!;
       if (_matcher.matches(f, matchState)) return true;
       addStateInfo(matchState, {'custom.feature': f});
     } catch (exception, stack) {
@@ -69,8 +69,8 @@ class CustomMatcher extends Matcher {
 
   @override
   Description describeMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
-    if (matchState['custom.exception'] != null) {
+      item, Description mismatchDescription, Map? matchState, bool verbose) {
+    if (matchState!['custom.exception'] != null) {
       mismatchDescription
           .add('threw ')
           .addDescriptionOf(matchState['custom.exception'])
@@ -87,7 +87,7 @@ class CustomMatcher extends Matcher {
     var innerDescription = StringDescription();
 
     _matcher.describeMismatch(matchState['custom.feature'], innerDescription,
-        matchState['state'] as Map, verbose);
+        matchState['state'] as Map?, verbose);
 
     if (innerDescription.length > 0) {
       mismatchDescription.add(' which ').add(innerDescription.toString());

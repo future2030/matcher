@@ -9,6 +9,7 @@ import 'test_utils.dart';
 
 void main() {
   test('isTrue', () {
+    int i = (null as dynamic);
     shouldPass(true, isTrue);
     shouldFail(false, isTrue, 'Expected: true Actual: <false>');
   });
@@ -215,9 +216,9 @@ void main() {
 
   group('Predicate Matchers', () {
     test('isInstanceOf', () {
-      shouldFail(0, predicate((x) => x is String, 'an instance of String'),
+      shouldFail(0, predicate((dynamic x) => x is String, 'an instance of String'),
           'Expected: an instance of String Actual: <0>');
-      shouldPass('cow', predicate((x) => x is String, 'an instance of String'));
+      shouldPass('cow', predicate((dynamic x) => x is String, 'an instance of String'));
 
       if (isDart2) {
         // With Dart2 semantics, predicate picks up a type argument of `bool`

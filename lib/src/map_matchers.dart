@@ -45,7 +45,7 @@ class _ContainsMapping extends Matcher {
 
   @override
   Description describeMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
+      item, Description mismatchDescription, Map? matchState, bool verbose) {
     if (!item.containsKey(_key)) {
       return mismatchDescription
           .add(" doesn't contain key ")

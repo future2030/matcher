@@ -15,7 +15,7 @@ abstract class Description {
   Description replace(String text);
 
   /// This is used to add arbitrary text to the description.
-  Description add(String text);
+  Description add(String/*!*/ text);
 
   /// This is used to add a meaningful description of a value.
   Description addDescriptionOf(value);
@@ -39,7 +39,7 @@ abstract class Matcher {
   /// [item] is the actual value. [matchState] can be supplied
   /// and may be used to add details about the mismatch that are too
   /// costly to determine in [describeMismatch].
-  bool matches(item, Map matchState);
+  bool/*!*/ matches(item, Map/*!*/ matchState);
 
   /// Builds a textual description of the matcher.
   Description describe(Description description);
@@ -55,6 +55,6 @@ abstract class Matcher {
   /// information that is not typically included but can be of help in
   /// diagnosing failures, such as stack traces.
   Description describeMismatch(item, Description mismatchDescription,
-          Map matchState, bool verbose) =>
+          Map? matchState, bool verbose) =>
       mismatchDescription;
 }

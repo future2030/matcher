@@ -164,8 +164,8 @@ class _ReturnsNormally extends FeatureMatcher<Function> {
 
   @override
   Description describeTypedMismatch(Function item,
-      Description mismatchDescription, Map matchState, bool verbose) {
-    mismatchDescription.add('threw ').addDescriptionOf(matchState['exception']);
+      Description mismatchDescription, Map? matchState, bool verbose) {
+    mismatchDescription.add('threw ').addDescriptionOf(matchState!['exception']);
     if (verbose) {
       mismatchDescription.add(' at ').add(matchState['stack'].toString());
     }
@@ -185,7 +185,7 @@ Matcher hasLength(matcher) => _HasLength(wrapMatcher(matcher));
 
 class _HasLength extends Matcher {
   final Matcher _matcher;
-  const _HasLength([Matcher matcher]) : _matcher = matcher;
+  const _HasLength(Matcher matcher) : _matcher = matcher;
 
   @override
   bool matches(item, Map matchState) {
@@ -207,7 +207,7 @@ class _HasLength extends Matcher {
 
   @override
   Description describeMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
+      item, Description mismatchDescription, Map? matchState, bool verbose) {
     try {
       // We want to generate a different description if there is no length
       // property; we use the same trick as in matches().
@@ -260,7 +260,7 @@ class _Contains extends Matcher {
 
   @override
   Description describeMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
+      item, Description mismatchDescription, Map? matchState, bool verbose) {
     if (item is String || item is Iterable || item is Map) {
       return super
           .describeMismatch(item, mismatchDescription, matchState, verbose);
@@ -305,7 +305,7 @@ class _In<T> extends FeatureMatcher<T> {
 /// For example:
 ///
 ///     expect(v, predicate((x) => ((x % 2) == 0), "is even"))
-Matcher predicate<T>(bool Function(T) f,
+Matcher predicate<T>(bool/*!*/ Function(T) f,
         [String description = 'satisfies function']) =>
     _Predicate(f, description);
 
